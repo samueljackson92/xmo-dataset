@@ -1,0 +1,10 @@
+scipy
+pandas
+s3fs
+jinja2
+requests
+matplotlib
+xarray
+intake
+intake_xarray
+scikit-image

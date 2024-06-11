@@ -74,12 +74,12 @@ def main():
     plot_folder = Path(args.plot_folder)
     plot_folder.mkdir(parents=True, exist_ok=True)
 
-    catalog = intake.open_catalog("catalog.yml")
-    bucket = catalog["stfc_s3"]
+    catalog = intake.open_catalog("https://mastapp.site/intake/catalog.yml")
+    bucket = catalog.level1.shots
+    df = pd.DataFrame(catalog.index.level1.sources.read())
 
-    df = pd.read_parquet(Path("~/Downloads/sources.parquet").expanduser())
-    xmo_df = df.loc[df.source == "xmo"]
-    xmo_df = xmo_df.sort_values("shot_id")
+    xmo_df = df.loc[df.name == "xmo"]
+    xmo_df = xmo_df.sort_values("shot_id", ascending=False)
 
     for _, row in xmo_df.iterrows():
         logging.info(f"Getting XMO data for {row.url}")
@@ -88,6 +88,7 @@ def main():
             logging.info(f"Skipping {row.url} as {output_file} already exists")
             continue
 
+        print(row.url)
         dataset = bucket(url=row.url).to_dask()
         spectrograms = create_spectrograms(dataset, row)
         spectrograms.to_zarr(output_file, mode="w", consolidated=True)
