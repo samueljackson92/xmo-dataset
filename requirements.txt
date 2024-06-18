@@ -8,3 +8,5 @@ xarray
 intake
 intake_xarray
 scikit-image
+scikit-learn
+bokeh
