@@ -7,6 +7,9 @@ matplotlib
 xarray
 intake
 intake_xarray
+intake_parquet
 scikit-image
 scikit-learn
 bokeh
+lightning
+torchmetrics
